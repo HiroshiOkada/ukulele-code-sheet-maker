@@ -1,0 +1,26 @@
+[project]
+name = "ukulele-code-sheet-maker"
+version = "0.1.0"
+description = "テキスト記法からA4のウクレレ用コードシートPDFを作成するCLI"
+readme = "README.md"
+authors = [
+    { name = "Hiroshi Okada", email = "okadahiroshi@miobox.jp" }
+]
+requires-python = ">=3.12"
+dependencies = [
+    "reportlab>=5.1.0",
+]
+
+[project.scripts]
+uke-sheet = "ukulele_code_sheet_maker:main"
+ukulele-code-sheet-maker = "ukulele_code_sheet_maker:main"
+
+[build-system]
+requires = ["uv_build>=0.11.19,<0.12.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "pypdf>=6.21.4",
+    "pytest>=9.2.0",
+]
