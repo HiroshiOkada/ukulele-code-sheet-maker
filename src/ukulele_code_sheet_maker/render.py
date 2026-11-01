@@ -60,7 +60,7 @@ def bar_width(bar: Bar, sheet: Sheet, font: str, carry: str | None = None) -> fl
 
 
 def diagram(canvas: Canvas, form: Form, x: float, top: float, font: str):
-    """縦向きから時計回りに90度回転。ナットは右、上からG C E A。"""
+    """縦向きから反時計回りに90度回転。ナットは左、上からA E C G。"""
     pressed = [v for v in form.frets if v is not None and v > 0]
     start = min(pressed) if pressed and max(pressed) > 4 else 1
     count = max(4, max(pressed, default=0) - start + 1)
@@ -69,32 +69,32 @@ def diagram(canvas: Canvas, form: Form, x: float, top: float, font: str):
     canvas.setStrokeColor(colors.black)
     canvas.setFont(font, 12)
     canvas.drawString(x, top + 18, form.label)
-    nut_x = x + 48
+    nut_x = x + 8
     canvas.setLineWidth(0.45)
     for string in range(4):
         sy = top - string * 10
-        canvas.line(nut_x - 40, sy, nut_x, sy)
+        canvas.line(nut_x, sy, nut_x + 40, sy)
     for fret in range(count + 1):
         canvas.setLineWidth(1.7 if fret == 0 and start == 1 else 0.45)
-        fx = nut_x - fret * fret_h
+        fx = nut_x + fret * fret_h
         canvas.line(fx, top, fx, top - 30)
     if start > 1:
         canvas.setFont("Helvetica", 6)
-        canvas.drawCentredString(nut_x - fret_h / 2, top + 5, str(start))
+        canvas.drawCentredString(nut_x + fret_h / 2, top + 5, str(start))
     for string, fret in enumerate(form.frets):
-        sy = top - string * 10
+        sy = top - (3 - string) * 10
         canvas.setLineWidth(0.7)
         if fret is None:
-            canvas.line(nut_x + 3, sy - 2, nut_x + 7, sy + 2)
-            canvas.line(nut_x + 3, sy + 2, nut_x + 7, sy - 2)
+            canvas.line(nut_x - 7, sy - 2, nut_x - 3, sy + 2)
+            canvas.line(nut_x - 7, sy + 2, nut_x - 3, sy - 2)
         elif fret == 0:
-            canvas.circle(nut_x + 5, sy, 2, fill=0, stroke=1)
+            canvas.circle(nut_x - 5, sy, 2, fill=0, stroke=1)
         else:
-            canvas.circle(nut_x - (fret - start + 0.5) * fret_h, sy, min(2.8, fret_h * .4), fill=1, stroke=0)
+            canvas.circle(nut_x + (fret - start + 0.5) * fret_h, sy, min(2.8, fret_h * .4), fill=1, stroke=0)
     canvas.setFont("Helvetica", 6)
     canvas.setFillColor(GRAY)
-    for n, name in enumerate("GCEA"):
-        canvas.drawRightString(x + 5, top - n * 10 - 2, name)
+    for n, name in enumerate("AECG"):
+        canvas.drawString(nut_x + 43, top - n * 10 - 2, name)
 
 
 def stroke(canvas, symbol, x, y):
